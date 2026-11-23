@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casaria – Tu próximo hogar, de la búsqueda a las llaves</title>
+  <meta name="description" content="Búsqueda de vivienda y reforma llave en mano en Alicante, Valencia y alrededores. Un solo equipo desde la primera visita hasta el último detalle." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ========== RESET & BASE ========== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf8f5;
+      --bg-alt: #f5f0e6;
+      --teal: #2f4f4f;
+      --teal-light: rgba(47,79,79,0.1);
+      --sand: #d8b4a0;
+      --sand-dark: #c9a08a;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 2px rgba(47,79,79,0.05);
+      --shadow-md: 0 4px 12px rgba(47,79,79,0.08);
+      --shadow-lg: 0 8px 30px rgba(47,79,79,0.12);
+      --radius: 1rem;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--teal); line-height: 1.6; }
+    h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    /* ========== LAYOUT ========== */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
+    section { padding: 6rem 0; }
+
+    /* ========== BUTTONS ========== */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: 1rem 1.75rem; background: var(--sand); color: var(--teal);
+      font-weight: 600; border-radius: var(--radius); border: none; cursor: pointer;
+      font-size: 1rem; font-family: var(--font-body); transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--sand-dark); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: 1rem 1.75rem; background: transparent; color: var(--white);
+      font-weight: 600; border-radius: var(--radius); border: 2px solid rgba(255,255,255,.4);
+      font-size: 1rem; font-family: var(--font-body); cursor: pointer; transition: background .2s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,.1); }
+
+    /* ========== HEADER ========== */
+    #site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background .3s, box-shadow .3s;
+    }
+    #site-header.scrolled {
+      background: rgba(250,248,245,.92);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-md);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .75rem 1.25rem; max-width: 1200px; margin: 0 auto;
+    }
+    .logo { display: flex; align-items: center; gap: .5rem; }
+    .logo img { width: 40px; height: 40px; object-fit: contain; border-radius: .5rem; }
+    .logo-name {
+      font-family: var(--font-heading); font-size: 1.25rem; font-weight: 600;
+      letter-spacing: -.02em; color: var(--teal);
+    }
+    nav.desktop { display: flex; gap: .25rem; }
+    nav.desktop a {
+      padding: .5rem 1rem; font-size: .875rem; font-weight: 500;
+      color: rgba(47,79,79,.8); border-radius: .5rem; transition: color .2s, background .2s;
+    }
+    nav.desktop a:hover { color: var(--teal); background: rgba(47,79,79,.05); }
+    .hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      padding: .5rem; border-radius: .5rem; color: var(--teal);
+    }
+    .hamburger:hover { background: rgba(47,79,79,.05); }
+    .hamburger svg { display: block; }
+    .mobile-nav {
+      display: none; flex-direction: column; padding: .75rem 1.25rem;
+      background: rgba(250,248,245,.96); backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(47,79,79,.1); gap: .25rem;
+    }
+    .mobile-nav a {
+      display: block; padding: .75rem 1rem; font-size: .875rem; font-weight: 500;
+      color: var(--teal); border-radius: .5rem; transition: background .2s;
+    }
+    .mobile-nav a:hover { background: rgba(47,79,79,.05); }
+    .mobile-nav.open { display: flex; }
+
+    /* ========== HERO ========== */
+    #hero {
+      position: relative; min-height: 90vh; display: flex; align-items: center;
+      overflow: hidden; padding: 0;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+    }
+    .hero-bg img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(47,79,79,.85), rgba(47,79,79,.6), rgba(47,79,79,.3));
+    }
+    .hero-content {
+      position: relative; z-index: 10; padding: 8rem 1.25rem 8rem;
+      max-width: 1200px; margin: 0 auto; width: 100%;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.25rem, 5vw, 3.75rem); color: var(--white);
+      line-height: 1.1; font-weight: 700; letter-spacing: -.03em; margin-bottom: 1.5rem;
+      max-width: 700px;
+    }
+    .hero-content p {
+      font-size: clamp(1rem, 2vw, 1.25rem); color: rgba(255,255,255,.85);
+      line-height: 1.6; margin-bottom: 2rem; max-width: 560px;
+    }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+    .hero-note { font-size: .875rem; color: rgba(255,255,255,.6); }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 10; animation: bounce 2s infinite;
+    }
+    .scroll-hint svg { color: rgba(255,255,255,.5); }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ========== SECTION HEADER ========== */
+    .section-header { text-align: center; margin-bottom: 4rem; }
+    .section-header h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700;
+      letter-spacing: -.02em; margin-bottom: 1rem; color: var(--teal);
+    }
+    .section-header p { font-size: 1.125rem; color: rgba(47,79,79,.7); max-width: 640px; margin: 0 auto; }
+
+    /* ========== SERVICES ========== */
+    #servicios { background: var(--bg); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.5rem; }
+    .service-card {
+      background: var(--white); border-radius: var(--radius); padding: 2rem;
+      box-shadow: var(--shadow-md); transition: box-shadow .3s, transform .3s;
+      display: flex; flex-direction: column;
+    }
+    .service-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .service-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px; border-radius: .75rem;
+      background: rgba(216,180,160,.2); margin-bottom: 1.25rem; transition: background .2s;
+    }
+    .service-card:hover .service-icon { background: rgba(216,180,160,.3); }
+    .service-tag {
+      font-size: .7rem; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--sand); margin-bottom: .5rem;
+    }
+    .service-card h3 {
+      font-size: 1.25rem; font-weight: 600; color: var(--teal);
+      margin-bottom: .75rem; font-family: var(--font-heading);
+    }
+    .service-card p { color: rgba(47,79,79,.7); line-height: 1.6; flex: 1; }
+
+    /* ========== HOW IT WORKS ========== */
+    #como-funciona { background: var(--bg-alt); }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.5rem; }
+    .step-card {
+      background: var(--white); border-radius: var(--radius); padding: 2rem;
+      box-shadow: var(--shadow-md); transition: box-shadow .3s;
+    }
+    .step-card:hover { box-shadow: var(--shadow-lg); }
+    .step-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .step-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px; border-radius: .75rem;
+      background: var(--teal); color: var(--white); flex-shrink: 0;
+    }
+    .step-num {
+      font-size: .7rem; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--sand);
+    }
+    .step-card h3 {
+      font-size: 1.25rem; font-weight: 600; color: var(--teal);
+      margin-bottom: .75rem; font-family: var(--font-heading);
+    }
+    .step-card p { color: rgba(47,79,79,.7); line-height: 1.6; }
+
+    /* ========== FOR WHOM ========== */
+    #para-quien { background: var(--bg-alt); }
+    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    .chip {
+      display: inline-flex; align-items: center; gap: .75rem;
+      background: var(--white); padding: 1rem 1.5rem; border-radius: 1rem;
+      box-shadow: var(--shadow-sm); transition: box-shadow .3s, transform .2s;
+    }
+    .chip:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .chip svg { color: var(--sand); flex-shrink: 0; }
+    .chip span { font-size: .9375rem; font-weight: 500; color: var(--teal); }
+
+    /* ========== ABOUT ========== */
+    #sobre-nosotros { background: var(--bg); }
+    .about-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+    @media(min-width:1024px) { .about-grid { grid-template-columns: 1fr 1fr; gap: 5rem; } }
+    .about-text h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; letter-spacing: -.02em;
+      color: var(--teal); margin-bottom: 1.5rem;
+    }
+    .about-text p { color: rgba(47,79,79,.7); line-height: 1.7; margin-bottom: 1rem; }
+    .about-text .zone-note { font-size: .875rem; color: var(--sand); font-weight: 500; }
+    .about-card {
+      background: var(--teal); border-radius: var(--radius); padding: 2.5rem; color: var(--white);
+    }
+    .about-card h3 {
+      font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem;
+      font-family: var(--font-heading);
+    }
+    .values-list { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 2rem; }
+    .value-item { display: flex; align-items: flex-start; gap: 1rem; }
+    .value-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: .5rem;
+      background: rgba(255,255,255,.1); flex-shrink: 0;
+    }
+    .value-icon svg { color: var(--sand); }
+    .value-text { color: rgba(255,255,255,.85); line-height: 1.6; padding-top: .5rem; }
+    .about-divider { border-top: 1px solid rgba(255,255,255,.15); padding-top: 1.5rem; }
+    .about-divider p { font-size: .875rem; color: rgba(255,255,255,.6); margin-bottom: .75rem; }
+    .btn-realty {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .75rem 1.25rem; background: var(--sand); color: var(--teal);
+      font-weight: 600; border-radius: .75rem; font-size: .875rem; transition: background .2s;
+    }
+    .btn-realty:hover { background: var(--sand-dark); }
+
+    /* ========== CONTACT ========== */
+    #contacto { background: var(--teal); }
+    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+    @media(min-width:1024px) { .contact-grid { grid-template-columns: 1fr 1fr; gap: 5rem; } }
+    .contact-info h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; letter-spacing: -.02em;
+      color: var(--white); margin-bottom: 1.5rem;
+    }
+    .contact-info > p { font-size: 1.125rem; color: rgba(255,255,255,.7); line-height: 1.6; margin-bottom: 2.5rem; max-width: 400px; }
+    .contact-details { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-item { display: flex; align-items: center; gap: .75rem; }
+    .contact-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: .5rem; background: rgba(255,255,255,.1); flex-shrink: 0;
+    }
+    .contact-icon svg { color: var(--sand); }
+    .contact-item span { color: rgba(255,255,255,.85); }
+    .btn-whatsapp-contact {
+      display: inline-flex; align-items: center; gap: .5rem; margin-top: 1rem;
+      padding: .75rem 1.25rem; background: #25D366; color: var(--white);
+      font-weight: 600; border-radius: .75rem; font-size: .875rem; transition: background .2s;
+    }
+    .btn-whatsapp-contact:hover { background: #1fb855; }
+    .contact-form-wrap {
+      background: var(--white); border-radius: var(--radius); padding: 2rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block; font-size: .875rem; font-weight: 500; color: var(--teal); margin-bottom: .375rem;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: .75rem 1rem; border-radius: .75rem;
+      border: 1px solid rgba(47,79,79,.15); background: var(--bg);
+      color: var(--teal); font-family: var(--font-body); font-size: 1rem;
+      transition: box-shadow .2s; outline: none;
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(47,79,79,.4); }
+    .form-group input:focus, .form-group textarea:focus { box-shadow: 0 0 0 3px rgba(47,79,79,.15); }
+    .form-group textarea { resize: none; }
+    .btn-submit {
+      width: 100%; padding: 1rem; background: var(--teal); color: var(--white);
+      font-weight: 600; border-radius: .75rem; border: none; cursor: pointer;
+      font-family: var(--font-body); font-size: 1rem; display: flex; align-items: center;
+      justify-content: center; gap: .5rem; transition: background .2s;
+    }
+    .btn-submit:hover { background: #3a5f5f; }
+    .form-note { font-size: .75rem; color: rgba(47,79,79,.5); text-align: center; margin-top: .5rem; }
+    .form-success { text-align: center; padding: 2.5rem 0; display: none; }
+    .form-success.visible { display: block; }
+    .form-success-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(216,180,160,.2); margin-bottom: 1rem;
+    }
+    .form-success h3 {
+      font-size: 1.25rem; font-weight: 600; color: var(--teal);
+      margin-bottom: .5rem; font-family: var(--font-heading);
+    }
+    .form-success p { color: rgba(47,79,79,.7); font-size: .9375rem; line-height: 1.6; }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background: var(--teal); border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    @media(min-width:640px) {
+      .footer-inner { flex-direction: row; justify-content: space-between; }
+    }
+    .footer-inner p { font-size: .875rem; color: rgba(255,255,255,.5); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: .875rem; color: rgba(255,255,255,.5); transition: color .2s; }
+    .footer-links a:hover { color: rgba(255,255,255,.8); }
+
+    /* ========== WHATSAPP BUTTON ========== */
+    #wa-btn {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px; background: #25D366; color: var(--white);
+      border-radius: 50%; box-shadow: var(--shadow-lg); transition: background .2s, transform .2s;
+    }
+    #wa-btn:hover { background: #1fb855; transform: scale(1.1); }
+
+    /* ========== ANIMATIONS ========== */
+    .fade-up { opacity: 0; transform: translateY(2rem); transition: opacity .7s, transform .7s; }
+    .fade-left { opacity: 0; transform: translateX(-2rem); transition: opacity .7s, transform .7s; }
+    .fade-right { opacity: 0; transform: translateX(2rem); transition: opacity .7s, transform .7s; }
+    .fade-up.visible, .fade-left.visible, .fade-right.visible { opacity: 1; transform: none; }
+
+    /* ========== RESPONSIVE ========== */
+    @media(max-width:767px) {
+      nav.desktop { display: none; }
+      .hamburger { display: block; }
+      section { padding: 4rem 0; }
+      .hero-content { padding: 6rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <img src="logo-casaria.png" alt="Casaria logo" />
+      <span class="logo-name">CASARIA</span>
+    </a>
+    <nav class="desktop">
+      <a href="#servicios">Servicios</a>
+      <a href="#como-funciona">Cómo trabajamos</a>
+      <a href="#sobre-nosotros">Sobre Casaria</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <svg id="icon-menu" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg id="icon-close" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="#servicios">Servicios</a>
+    <a href="#como-funciona">Cómo trabajamos</a>
+    <a href="#sobre-nosotros">Sobre Casaria</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <img src="img/banner-casaria.jpg" alt="Hogar reformado y acogedor con Casaria" />
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <h1>Tu próximo hogar, de la búsqueda a las llaves.</h1>
+    <p>Buscamos la vivienda que encaja contigo y coordinamos su reforma para que puedas entrar a vivir. Un solo equipo, desde la primera visita hasta el último detalle.</p>
+    <div class="hero-btns">
+      <a href="#contacto" class="btn-primary">
+        Cuéntanos qué buscas
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#como-funciona" class="btn-outline">Cómo trabajamos</a>
+    </div>
+    <p class="hero-note">Búsqueda de vivienda y reforma llave en mano en Alicante, Valencia y alrededores.</p>
+  </div>
+  <div class="scroll-hint">
+    <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios">
+  <div class="container">
+    <div class="section-header fade-up">
+      <h2>Servicios Casaria</h2>
+      <p>Un único equipo que coordina todo por ti, desde la búsqueda de vivienda hasta la reforma final.</p>
+    </div>
+    <div class="services-grid">
+      <article class="service-card fade-up" style="transition-delay:.1s">
+        <div class="service-icon">
+          <svg width="22" height="22" fill="none" stroke="#2f4f4f" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <span class="service-tag">Búsqueda de vivienda</span>
+        <h3>Personal shopper inmobiliario</h3>
+        <p>Buscamos piso, casa, chalet o finca según tus criterios y analizamos cada opción para que tomes decisiones con datos y tranquilidad.</p>
+      </article>
+      <article class="service-card fade-up" style="transition-delay:.2s">
+        <div class="service-icon">
+          <svg width="22" height="22" fill="none" stroke="#2f4f4f" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="service-tag">Compra segura</span>
+        <h3>Acompañamiento en la compra</h3>
+        <p>Te acompañamos en visitas, negociación y revisión de puntos clave junto a los profesionales necesarios, para minimizar riesgos.</p>
+      </article>
+      <article class="service-card fade-up" style="transition-delay:.3s">
+        <div class="service-icon">
+          <svg width="22" height="22" fill="none" stroke="#2f4f4f" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <span class="service-tag">Reforma llave en mano</span>
+        <h3>Gestión integral de reforma</h3>
+        <p>Coordinamos proyecto, licencias y gremios para transformar la vivienda en la casa que tienes en mente, sin que tengas que estar pendiente de todo.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="como-funciona">
+  <div class="container">
+    <div class="section-header fade-up">
+      <h2>Cómo trabajamos en Casaria</h2>
+      <p>Un proceso claro y acompañado, pensado para que llegues a tu nueva casa con calma y seguridad.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card fade-up" style="transition-delay:.1s">
+        <div class="step-top">
+          <div class="step-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <span class="step-num">Paso 01</span>
+        </div>
+        <h3>Te conocemos</h3>
+        <p>Hablamos contigo para entender tu presupuesto, zona ideal, estilo de vida y cómo te imaginas tu futura casa.</p>
+      </div>
+      <div class="step-card fade-up" style="transition-delay:.2s">
+        <div class="step-top">
+          <div class="step-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          </div>
+          <span class="step-num">Paso 02</span>
+        </div>
+        <h3>Buscamos y filtramos</h3>
+        <p>Analizamos el mercado, filtramos opciones y te presentamos solo las viviendas que encajan de verdad contigo.</p>
+      </div>
+      <div class="step-card fade-up" style="transition-delay:.3s">
+        <div class="step-top">
+          <div class="step-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <span class="step-num">Paso 03</span>
+        </div>
+        <h3>Te acompañamos en la compra</h3>
+        <p>Te ayudamos en visitas, negociación y pasos clave para que tomes decisiones con seguridad.</p>
+      </div>
+      <div class="step-card fade-up" style="transition-delay:.4s">
+        <div class="step-top">
+          <div class="step-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/><rect x="2" y="14" width="7" height="7"/></svg>
+          </div>
+          <span class="step-num">Paso 04</span>
+        </div>
+        <h3>Reforma llave en mano</h3>
+        <p>Diseñamos contigo la reforma, coordinamos a los profesionales y te entregamos la vivienda terminada, lista para entrar a vivir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section id="para-quien">
+  <div class="container">
+    <div class="section-header fade-up">
+      <h2>¿Para quién es Casaria?</h2>
+      <p>Para quienes quieren cambiar de casa sin volverse locos con visitas, papeleo y obras.</p>
+    </div>
+    <div class="chips">
+      <div class="chip fade-up" style="transition-delay:.1s">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Personas sin tiempo para buscar vivienda</span>
+      </div>
+      <div class="chip fade-up" style="transition-delay:.2s">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Quien vive en otra ciudad o país</span>
+      </div>
+      <div class="chip fade-up" style="transition-delay:.3s">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Familias que buscan su casa definitiva</span>
+      </div>
+      <div class="chip fade-up" style="transition-delay:.4s">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        <span>Inversores que quieren una reforma a medida</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="sobre-nosotros">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text fade-left">
+        <h2>Sobre Casaria</h2>
+        <p>En Casaria unimos experiencia en búsqueda de vivienda y gestión de reformas, con un enfoque muy cercano y transparente.</p>
+        <p>Trabajamos contigo de tú a tú, explicando cada paso y buscando siempre la mejor relación calidad‑precio para tu proyecto de hogar.</p>
+        <p class="zone-note">Zonas de trabajo principales: Comunidad Valenciana (Alicante, Valencia y alrededores). Podemos estudiar otros destinos según tu caso.</p>
+      </div>
+      <div class="about-card fade-right">
+        <h3>Lo que nos mueve en Casaria</h3>
+        <ul class="values-list">
+          <li class="value-item">
+            <div class="value-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <span class="value-text">Que te sientas acompañado en todo momento.</span>
+          </li>
+          <li class="value-item">
+            <div class="value-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <span class="value-text">Trato cercano, honesto y sin sorpresas.</span>
+          </li>
+          <li class="value-item">
+            <div class="value-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <span class="value-text">Convertir una casa en tu hogar, a tu manera.</span>
+          </li>
+        </ul>
+        <div class="about-divider">
+          <p>¿También quieres asegurar tu vivienda?</p>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn-realty">
+            Comparar mi seguro con Realty
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info fade-left">
+        <h2>Hablemos de tu futura casa</h2>
+        <p>Cuéntanos qué estás buscando y te responderemos con una primera propuesta sin compromiso.</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <span>casaria@gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <span>+34 655 029 549</span>
+          </div>
+          <a href="https://wa.me/34655029549" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-contact">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+      </div>
+      <div class="contact-form-wrap fade-right">
+        <div class="form-success" id="form-success">
+          <div class="form-success-icon">
+            <svg width="24" height="24" fill="none" stroke="#2f4f4f" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </div>
+          <h3>¡Gracias por escribirnos!</h3>
+          <p>Pronto activaremos el envío automático. Mientras, puedes escribirnos directamente a <a href="mailto:casaria@gmail.com" style="color:var(--teal);font-weight:500;text-decoration:underline">casaria@gmail.com</a> o por WhatsApp.</p>
+        </div>
+        <form id="contact-form">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" required />
+          </div>
+          <div class="form-group">
+            <label for="zona">Zona donde te gustaría vivir</label>
+            <input id="zona" name="zona" type="text" placeholder="Ej. Alicante, Valencia, Costa Blanca..." />
+          </div>
+          <div class="form-group">
+            <label for="mensaje">Cuéntanos qué necesitas</label>
+            <textarea id="mensaje" name="mensaje" rows="4" placeholder="Presupuesto aproximado, tipo de vivienda, estilo..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Enviar mensaje
+          </button>
+          <p class="form-note">Al enviar este formulario aceptas que te contactemos para responder a tu consulta.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <p>© <span id="year"></span> Casaria. Todos los derechos reservados.</p>
+    <div class="footer-links">
+      <a href="#">Aviso legal</a>
+      <a href="#">Política de privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a id="wa-btn" href="https://wa.me/34655029549" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Header scroll
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Mobile menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  const iconMenu = document.getElementById('icon-menu');
+  const iconClose = document.getElementById('icon-close');
+  hamburger.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    iconMenu.style.display = open ? 'none' : 'block';
+    iconClose.style.display = open ? 'block' : 'none';
+  });
+  mobileNav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      iconMenu.style.display = 'block';
+      iconClose.style.display = 'none';
+    });
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-up, .fade-left, .fade-right').forEach(el => observer.observe(el));
+
+  // Contact form
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('form-success').classList.add('visible');
+  });
+</script>
+</body>
+</html>
